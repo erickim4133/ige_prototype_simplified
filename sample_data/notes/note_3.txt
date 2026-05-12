@@ -1,0 +1,6 @@
+[arXiv:2405.13012] Bellemare-Pepin, Lespinasse, Thölke, Harel, Mathewson, Olson, Bengio, Jerbi (2024)
+Divergent Creativity in Humans and Large Language Models
+---
+최근 LLM의 급부상으로 인간 수준의 창의성에 근접했다는 주장이 등장했으나, 이 논의에서 빠진 핵심은 LLM의 의미론적 다양성에 대한 체계적 평가였다. 이를 보완하기 위해 계산 창의성의 최신 방법론을 활용해 최신 LLM과 10만 명 규모의 인간 데이터셋을 비교 분석했다. 발산 연상 과제(DAT) 및 창작 글쓰기 능력을 기준으로 LLM과 인간의 의미론적 발산도를 측정했다.
+
+결과: LLM은 DAT에서 평균 인간을 넘어설 수 있으나, 고창의성 인간은 최상위 LLM도 크게 상회하며 이는 현 LLM의 구조적 천장을 시사한다. 프롬프트 설계·하이퍼파라미터 조정으로 의미 다양성 개선은 가능하다. 발산적 사고 측정에 한정되어 창의성의 다른 차원은 포함되지 않았다는 점이 주요 한계다.

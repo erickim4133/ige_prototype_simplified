@@ -1,0 +1,8 @@
+Context:
+
+The user is exploring an AI learning tool idea.
+They want to generate a practical product concept from their existing personal DB.
+The tool should connect the current conversation context with stored concept indexes,
+then combine a mechanism concept and a problem concept to produce a new idea.
+The user is concerned about reducing cognitive load, avoiding full-note retrieval,
+and using concept-level search before loading relevant notes.

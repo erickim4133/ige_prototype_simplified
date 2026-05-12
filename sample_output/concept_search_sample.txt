@@ -1,0 +1,24 @@
+# context:
+
+The user is exploring an AI learning tool idea.
+They want to generate a practical product concept from their existing personal DB.
+The tool should connect the current conversation context with stored concept indexes,
+then combine a mechanism concept and a problem concept to produce a new idea.
+The user is concerned about reducing cognitive load, avoiding full-note retrieval,
+and using concept-level search before loading relevant notes.
+
+# selected problem concepts:
+
+1. [id: 1] llm 산출물 상호 유사성 심화
+2. [id: 36] llm 보조가 비보조 단계의 독립적 창의 수행 저해
+3. [id: 39] llm의 의미론적 다양성 체계적 평가 부재
+4. [id: 2] 다수 llm 적용에도 동질화 해소 불가
+5. [id: 61] 의견·오류·우려 표현 억제로 인한 학습 및 성과 저해
+
+# selected mechanism concepts:
+
+1. [id: 47] ast 기반 유사도 측정으로 독창성 강제
+2. [id: 43] 프롬프트 설계 및 하이퍼파라미터 조정을 통한 의미 다양성 개선 가능성
+3. [id: 41] 발산 연상 과제 및 창작 글쓰기 능력 기반 의미론적 발산도 측정
+4. [id: 63] 심리적 안전감 형성을 통한 학습 행동 촉진
+5. [id: 40] 계산 창의성 방법론을 활용한 llm과 인간 데이터셋 비교 분석
