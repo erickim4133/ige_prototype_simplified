@@ -112,7 +112,7 @@ FastAPI 실행은 로컬 API 형태로 같은 파이프라인을 테스트하는
 
 프로젝트 루트에서 실행:
 ```
-uvicorn src.app:ige_app --reload
+python -m uvicorn app:ige_app --app-dir src --reload
 ```
 
 API 요청:
