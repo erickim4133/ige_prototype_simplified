@@ -162,8 +162,9 @@ POST /generate
 | context.txt | 직접 실행 시 사용할 context 입력 파일 |
 | data/ige_prototype.db | SQLite DB 파일 |
 | sample_data/notes | 공개 가능한 sample note 파일 |
-| sample_output | 실행 결과 예시 |
+| sample_output | 주요 실행 결과 예시 |
 | docs/run_log.md | 구현 및 병목 기록 일부 정리 |
+| docs/output_log.md | Baseline 비교에 사용한 전체 실행 로그 |
 | src/memo_db.py | DB 경로와 테이블 생성 |
 | src/seed_sample_data.py | sample note를 SQLite DB에 저장 |
 | src/concept_extractor.py | note 기반 concept 추출 |
@@ -181,11 +182,66 @@ POST /generate
 - sample_output/concept_search_sample.txt
 - sample_output/idea_generator_sample.txt
 - sample_output/idea_generator_sample2.txt
+- docs/output_log.md
 
 각 파일에서 자세한 실행 결과를 확인할 수 있습니다.
 
 
-## 9. 한계와 확인한 점
+## 9. Baseline 비교
+
+
+같은 질문을 LLM에 바로 입력하는 방식을 Baseline으로 삼아 IGE output을 비교했습니다.
+
+답변의 논리적 정합성과 실현 가능성은 비교 기준으로 두지 않았습니다. PoC의 목적이 같은 문제 상황에서 다른 탐색 방향이 만들어지는지를 확인하는 것이기 때문입니다. LLM은 context를 바로 입력받아 답변을 생성하고, IGE output은 problem concept, mechanism concept, 관련 note를 거쳐 결과를 생성합니다.
+
+전체 실행 결과는 docs/output_log.md에 기록되어 있습니다.
+
+
+1) 사용 context
+
+- context 1: 짧은 메모를 모아두는 서비스
+- conctex 2: 온라인 학습 서비스
+
+context에 특정 해결 방법을 언급하지는 않았으나, 탐색 로직의 차이를 구분하기 용이하게 하기 위해 LLM이 비교적 익숙한 문제 해결 방향으로 답변하기 쉬운 상황으로 구성했습니다.
+
+
+2) 비교 기준
+
+비교 기준은 다음 두 가지입니다.
+
+1. context와 무관하게 이탈하지 않는가
+2. Baseline과 다른 탐색 방향이 보이는가
+
+첫 번째는 IGE output의 최소 통과 기준이며, 두 번째 기준은 IGE output이 Baseline과 구분되는 탐색 루트를 만들었는지 확인하기 위한 기준입니다.
+IGE output이 낯선 방향으로 전개되더라도, context와의 연결을 유지하면 유효한 결과로 보았습니다.
+
+
+3) 비교 구조
+
+IGE output 3개는 서로 영향을 주는 단계별 결과가 아니라, context 관련성 순으로 선택된 concept 목록에서 서로 다른 순번의 problem concept와 mechanism concept를 조합해 만든 탐색 후보입니다.
+
+3개의 IGE output은 한 번의 pipeline 실행에서 함께 생성되어 독립 시행이 아니므로, 엄밀한 비교에는 한계가 있다고 인지하고 있습니다. 다만 비교의 초점은 IGE output이 익숙한 프레임워크로 수렴하지 않고 같은 context 안에서 여러 탐색 방향으로 분기하는지 확인하는 데 있으므로, 이번 비교 목적에는 충분하다고 판단했습니다.
+
+
+4) 비교 요약
+
+
+| Context | Baseline 경향 | IGE output 경향 |
+|---|---|---|
+| 짧은 메모 서비스 | 자동 회고, 맥락 기반 알림, 기록 재발견 등 | 기억 공고화, private sandbox, 적응형 가이드, 사회적 넛지 등 |
+| 온라인 학습 서비스 | 챌린지, 완주 보장, 커뮤니티 기반 학습 운영 등 | 심리적 안전감, 질문과 오류 공유, 비대칭 가격 구조, 사회적 규범 메시지 등 |
+
+
+5) 확인한 점
+
+두 context 모두에서 Baseline은 문제 상황에 부합하는 익숙한 해결 프레임워크로 수렴했습니다.
+짧은 메모 서비스 context에서는 UX 및 제품 설계 관점의 프레임워크로, 온라인 학습 서비스 context에서는 전환율과 재방문 중심의 운영 프레임워크로 수렴했습니다.
+
+반면 IGE output은 단일 프레임워크로 수렴하지 않고, problem concept, mechanism concept, 관련 note의 조합을 통해 여러 방향으로 분기했습니다. 일부는 낯선 방향으로 전개되었지만 context와의 연결은 유지했습니다.
+따라서 이번 비교에서 Baseline은 context에 직접 부합하는 도메인 프레임워크로 수렴하는 반면, IGE output은 같은 context 안에서 프레임워크를 고정하지 않고 note의 내용을 기준으로 한 비정형적인 탐색 방향을 생성하는 것을 확인했습니다.
+
+
+## 10. 구현 한계
 
 
 현재 PoC는 IGE 구상의 초기 흐름을 작은 범위에서 확인하기 위해, 향후 구조에서는 graph DB나 node, edge 구조로 처리해야 할 관계 탐색 일부를 LLM 판단과 단순 규칙으로 대체했습니다. 구체적으로는 context와 관련된 concept를 LLM이 먼저 선택하고, 이후 collision 조합은 선택된 concept의 rank를 기준으로 구성합니다. 이러한 방식으로 작은 sample data에서 전체 파이프라인을 빠르게 확인할 수 있었지만, concept 간 실제 의미 거리, 관계 방향, 연결 강도를 수치화할 수는 없었습니다.
@@ -194,10 +250,10 @@ POST /generate
 
 구현 과정에서는 데이터 스키마의 중요성도 확인했습니다. 초기 설계에서 concept의 구조를 충분히 분리해두지 않아, 실행 과정에서 데이터를 다시 변환하는 로직이 늘어났습니다. 그 결과 데이터 흐름을 추적하기 어려워졌고, 작은 PoC임에도 중심 데이터의 스키마를 뒤늦게 바꾸는 일이 쉽지 않다는 점을 확인했습니다. 특히 concept처럼 시스템의 중심에 있는 데이터는 추출, 선택, 조합, note 연결 단계에서 반복적으로 참조되므로 초기에 구조를 명확히 잡아두는 것이 필수라는 점을 확인했습니다.
 
-별도로, 현재 PoC에는 idea output의 품질을 자동으로 평가하는 로직이 없습니다. 출력이 실제로 다른 관점을 만들었는지, context와의 관련성을 유지했는지, 반복 실행에서도 안정적인 품질을 보이는지는 아직 수동으로 확인해야 합니다. 
+별도로, 현재 PoC에는 idea output의 품질을 자동으로 평가하는 로직이 없습니다. 출력이 실제로 다른 관점을 만들었는지, context와의 관련성을 유지했는지, 반복 실행에서도 안정적인 품질을 보이는지는 아직 직접 확인해야 합니다. 
 
 
-## 10. 향후 개선 방향
+## 11. 향후 개선 방향
 
 
 이후 방향은 현재 PoC에서 LLM 판단과 rank 기반 조합으로 단순화한 부분을, IGE 구상에서 의도한 관계 기반 탐색 구조로 옮기는 것입니다.
@@ -205,5 +261,5 @@ POST /generate
 - graph 기반 관계 탐색 검토
 - 중심 데이터인 concept 스키마 정의
 - 임베딩 유사도 기반 concept 검색 검토
-- output 품질 평가 기준 정리
+- output 평가 기준 정량화
 - Non-LLM 기반 validator 검토
